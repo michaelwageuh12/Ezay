@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Ezay</string>
+    <string name="next">NEXT</string>
+    <string name="prev">PREV</string>
+    <string name="source">Source</string>
+    <string name="destination">Destination</string>
+    <string name="google_maps_key">AIzaSyB_1Zy_kUpiVS7Bm2QYJ_18sn4N1hu3B-U</string>
+</resources>
