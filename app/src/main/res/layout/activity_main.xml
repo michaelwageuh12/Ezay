@@ -4,99 +4,115 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-        <LinearLayout
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@mipmap/ic_start" />
+
+        <TextView
+            android:id="@+id/sourceET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:hint="@string/source"
+            android:inputType="text" />
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/sourceET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/source"
-                android:inputType="text" />
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@mipmap/ic_end" />
+
+        <TextView
+            android:id="@+id/destinationET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:hint="@string/destination"
+            android:inputType="text" />
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/destinationET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/destination"
-                android:inputType="text" />
-        </LinearLayout>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"></fragment>
 
-        <fragment
-            android:id="@+id/mapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp">
+
+        <Button
+            android:id="@+id/firstBtn"
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/custom_button"
+            android:foreground="@drawable/ic_first" />
+
+        <View
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="4"></fragment>
+            android:layout_weight="1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/prevtBtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="16dp">
+            android:layout_weight="2"
+            android:background="@drawable/custom_button"
+            android:text="@string/prev"
+            android:textColor="@color/colorWhite" />
 
-            <Button
-                android:id="@+id/firstBtn"
-                android:layout_width="16dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/custom_button"
-                android:foreground="@drawable/ic_first" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+        <Button
+            android:id="@+id/nextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/custom_button"
+            android:text="@string/next"
+            android:textColor="@color/colorWhite" />
 
-            <Button
-                android:id="@+id/prevtBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/custom_button"
-                android:text="@string/prev"
-                android:textColor="@color/colorWhite" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/nextBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/custom_button"
-                android:text="@string/next"
-                android:textColor="@color/colorWhite" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/lastBtn"
-                android:layout_width="16dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/custom_button"
-                android:foreground="@drawable/ic_last" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/lastBtn"
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/custom_button"
+            android:foreground="@drawable/ic_last" />
+    </LinearLayout>
 
 </LinearLayout>

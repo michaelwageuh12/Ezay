@@ -12,14 +12,10 @@ public interface EzayAPI {
     String BASE_URL = "http://52.55.117.63:3000/trip/";
 
     @Headers("Content-Type: application/json")
-    @GET("./1")
-    Call<Trip> GetFirstTrip();
-
-    @Headers("Content-Type: application/json")
-    @GET("./latest")
+    @GET("latest")
     Call<Trip> GetLatestTrip();
 
     @Headers("Content-Type: application/json")
-    @GET("./{id}")
-    Call<Trip> GetTrip(@Path("id") String id);
+    @GET("{id}")
+    Call<Trip> GetTrip(@Path("id") int id);
 }

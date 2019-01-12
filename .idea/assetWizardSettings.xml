@@ -58,8 +58,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="E:\Android_Projects\EzayTask\Eazy Android Task v2\01-start-text.png" />
-                                      <entry key="foregroundLayerName" value="ic_start" />
+                                      <entry key="foregroundImage" value="E:\Android_Projects\EzayTask\Eazy Android Task v2\02-end-text.png" />
+                                      <entry key="foregroundLayerName" value="ic_end" />
                                     </map>
                                   </option>
                                 </PersistentState>
