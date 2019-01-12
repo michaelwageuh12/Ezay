@@ -38,6 +38,17 @@ public class Trip {
         this.dateTime = dateTime;
     }*/
 
+    public Trip(Point source, Point destination) {
+        this.source = source;
+        this.destination = destination;
+    }
+
+    public Trip(int id, Point source, Point destination) {
+        this.id = id;
+        this.source = source;
+        this.destination = destination;
+    }
+
     public Point getSource() {
         return source;
     }

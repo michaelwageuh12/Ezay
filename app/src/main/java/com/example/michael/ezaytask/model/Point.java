@@ -16,10 +16,10 @@ public class Point {
     @Expose
     private Double latitutde ;
 
-    public Point(String name, Double longtiude, Double latitutde) {
+    public Point(String name, Double latitutde, Double longtiude) {
         this.name = name;
-        this.longtiude = longtiude;
         this.latitutde = latitutde;
+        this.longtiude = longtiude;
     }
 
     public String getName() {

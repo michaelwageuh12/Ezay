@@ -2,9 +2,9 @@ package com.example.michael.ezaytask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,19 +19,16 @@ import com.akexorcist.googledirection.constant.AvoidType;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.directions.route.Routing;
 import com.example.michael.ezaytask.model.Point;
 import com.example.michael.ezaytask.model.Trip;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.net.InetAddress;
@@ -48,7 +45,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final String BASE_URL = "http://52.55.117.63:3000/trip/";
     private static final String TAG = "MainActivity";
 
+    // Shared Preference
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+
     // saveInstanceState keys
+    private static final String TRIP_ID = "tripId_key";
     private static final String TRIP_SOURCE = "tripSource_key";
     private static final String TRIP_DESTINATION = "tripDestination_key";
     private static final String TRIP_SOURCE_LAT = "tripSourceLat_key";
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         next = findViewById(R.id.nextBtn);
         last = findViewById(R.id.lastBtn);
 
-        /*
+
         if(savedInstanceState != null){
             String tripSource = savedInstanceState.getString(TRIP_SOURCE);
             String tripDestination = savedInstanceState.getString(TRIP_DESTINATION);
@@ -91,15 +92,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String tripSourceLon = savedInstanceState.getString(TRIP_SOURCE_LONG);
             String tripDestinationLat = savedInstanceState.getString(TRIP_DESTINATION_LAT);
             String tripDestinationLon = savedInstanceState.getString(TRIP_DESTINATION_LONG);
+            id = savedInstanceState.getInt(TRIP_ID);
 
-            /*
             Point s = new Point(tripSource,Double.parseDouble(tripSourceLat),Double.parseDouble(tripSourceLon));
             Point d = new Point(tripDestination,Double.parseDouble(tripDestinationLat),Double.parseDouble(tripDestinationLon));
 
-            responseTrip.setSource(s);
-            responseTrip.setDestination(d);
+            responseTrip = new Trip(id,s,d);
         }
-        */
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,9 +150,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
-    /*
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt(TRIP_ID, id);
+
         savedInstanceState.putString(TRIP_SOURCE, sourceTV.getText().toString());
         savedInstanceState.putString(TRIP_SOURCE_LAT, responseTrip.getSource().getLatitutde().toString());
         savedInstanceState.putString(TRIP_SOURCE_LONG, responseTrip.getSource().getLongtiude().toString());
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         super.onSaveInstanceState(savedInstanceState);
     }
-    */
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -198,13 +199,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 destinationTV.setText(responseTrip.getDestination().getName());
 
                 final LatLng sourceLocation = new LatLng(responseTrip.getSource().getLatitutde(), responseTrip.getSource().getLongtiude());
-                map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_source))
-                        .position(sourceLocation).title(responseTrip.getSource().getName()));
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(sourceLocation, 16));
-
                 final LatLng destinationLocation = new LatLng(responseTrip.getDestination().getLatitutde(), responseTrip.getDestination().getLongtiude());
-                map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_destination))
-                        .position(destinationLocation).title(responseTrip.getDestination().getName()));
+
+                AddMarker(sourceLocation, destinationLocation);
+
+                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("source", responseTrip.getSource().getName());
+                editor.putString("sourceLat", responseTrip.getSource().getLatitutde().toString());
+                editor.putString("sourceLon", responseTrip.getSource().getLongtiude().toString());
+
+                editor.putString("destination", responseTrip.getDestination().getName());
+                editor.putString("destinationLat", responseTrip.getDestination().getLatitutde().toString());
+                editor.putString("destinationLon", responseTrip.getDestination().getLongtiude().toString());
+                editor.apply();
 
                 // Draw Route Between Source and Destination
                 DrawRoute(sourceLocation, destinationLocation);
@@ -224,6 +231,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     dialog.setTitle("Backend Response ERROR");
                     dialog.setMessage("Message: " + t.getMessage());
                     dialog.show();
+                }
+                SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                String restoredText = prefs.getString("source", "No source defined");
+                if (restoredText != null) {
+                    String source = prefs.getString("source", "No source defined");
+                    Double sourceLat = Double.parseDouble(prefs.getString("sourceLat", null));
+                    Double sourceLon = Double.parseDouble(prefs.getString("sourceLon", null));
+
+                    String destination = prefs.getString("destination", "No destination defined");
+                    Double destinationLat = Double.parseDouble(prefs.getString("destinationLat", null));
+                    Double destinationLon = Double.parseDouble(prefs.getString("destinationLon", null));
+
+                    sourceTV.setText(source);
+                    destinationTV.setText(destination);
+
+                    LatLng s1 = new LatLng(sourceLat,sourceLon);
+                    LatLng d1 = new LatLng(destinationLat,destinationLon);
+                    AddMarker(s1,d1);
                 }
             }
         });
@@ -250,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();
                             LatLng northeast = route.getBound().getNortheastCoordination().getCoordination();
                             LatLngBounds bounds = new LatLngBounds(southwest, northeast);
-                            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
 
                         } else {
                             // There is a problem when request the route more than 2 times ..
@@ -270,6 +295,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
     }
 
+    public void AddMarker(LatLng sourceLocation, LatLng destinationLocation){
+
+        map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_source))
+                .position(sourceLocation));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sourceLocation, 12));
+
+        map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_destination))
+                .position(destinationLocation));
+    }
+
     public boolean CheckInternetConnection() {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com");
@@ -283,4 +318,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
+
+
 }
