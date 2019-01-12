@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.michael.ezaytask"
+        applicationId "com.example.michael.ezay"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -34,6 +34,9 @@ dependencies {
     // Google Maps
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+
+    // To Find Route between 2 points
     implementation 'com.github.jd-alexander:library:1.1.0'
+    implementation 'com.akexorcist:googledirectionlibrary:1.1.1'
 
 }

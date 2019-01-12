@@ -16,6 +16,12 @@ public class Point {
     @Expose
     private Double latitutde ;
 
+    public Point(String name, Double longtiude, Double latitutde) {
+        this.name = name;
+        this.longtiude = longtiude;
+        this.latitutde = latitutde;
+    }
+
     public String getName() {
         return name;
     }
